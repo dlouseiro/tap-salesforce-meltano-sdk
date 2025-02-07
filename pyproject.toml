@@ -1,0 +1,83 @@
+[tool.poetry]
+name = "tap-salesforce-meltano-sdk"
+version = "0.1.0"
+description = "Singer tap for Salesforce, built with the Singer SDK"
+authors = ["Your Name <your.email@example.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+packages = [{include = "tap_salesforce"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"  # Updated minimum Python version
+singer-sdk = "^0.34.0"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.1"
+pytest-mock = "^3.11.1"
+pytest-cov = "^4.1.0"
+black = "^23.7.0"
+mypy = "^1.5.1"
+types-requests = "^2.31.0.2"
+ruff = "^0.0.287"
+pre-commit = "^3.3.3"
+prettier = "^0.0.7"
+isort = "^5.12.0"
+commitizen = "^3.5.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+tap-salesforce = "tap_salesforce.tap:TapSalesforce.cli"
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 100
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "B", "I", "N", "UP", "PL", "RUF"]
+ignore = ["E501"]
+target-version = "py310"  # Updated to Python 3.10
+
+[tool.mypy]
+python_version = "3.10"  # Updated to Python 3.10
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = """
+    -v
+    --cov=tap_salesforce
+    --cov-report=term-missing
+    --cov-report=xml
+    --cov-report=html
+    --strict-markers
+    --ignore=tests/integration
+"""
+
+[tool.coverage.run]
+source = ["tap_salesforce"]  # Keep original module name
+omit = ["tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "pass",
+    "raise ImportError",
+]
